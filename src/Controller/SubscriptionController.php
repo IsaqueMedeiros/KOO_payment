@@ -35,7 +35,7 @@ class SubscriptionController extends AbstractController
                 return $this->json(['error' => 'Card verification failed'], 400);
             }
 
-            $subscription = $this->payment->createSubscription($customerId, $data['plan']);
+            $subscription = $this->payment->createSubscription($customerId,);
 
             return $this->json([
                 'subscription_id' => $subscription->id,
@@ -51,78 +51,6 @@ class SubscriptionController extends AbstractController
         }
     }
 
-    #[Route('/api/subscriptions/{id}/upgrade', methods: ['POST'])]
-    public function upgrade(int $id, Request $request): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-
-        if (!$data || !isset($data['new_plan'])) {
-            return $this->json(['error' => 'Missing new_plan'], 400);
-        }
-
-        try {
-            $sub = $this->payment->updateSubscription($id, $data['new_plan']);
-
-            return $this->json([
-                'subscription_id' => $sub->id,
-                'plan_id'         => $sub->plan_id,
-                'status'          => $sub->status,
-            ]);
-        } catch (\Throwable $e) {
-            $this->logger->error('Subscription upgrade failed', [
-                'exception' => $e,
-                'payload'   => $data,
-                'id'        => $id,
-            ]);
-            return $this->json(['error' => 'Internal server error'], 500);
-        }
-    }
-
-    #[Route('/api/subscriptions/{id}/downgrade', methods: ['POST'])]
-    public function downgrade(int $id, Request $request): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-
-        if (!$data || !isset($data['new_plan'])) {
-            return $this->json(['error' => 'Missing new_plan'], 400);
-        }
-
-        try {
-            $sub = $this->payment->updateSubscription($id, $data['new_plan']);
-
-            return $this->json([
-                'subscription_id' => $sub->id,
-                'plan_id'         => $sub->plan_id,
-                'status'          => $sub->status,
-            ]);
-        } catch (\Throwable $e) {
-            $this->logger->error('Subscription downgrade failed', [
-                'exception' => $e,
-                'payload'   => $data,
-                'id'        => $id,
-            ]);
-            return $this->json(['error' => 'Internal server error'], 500);
-        }
-    }
- 
-    #[Route('/api/subscriptions/{id}', methods: ['DELETE'])]
-    public function cancel(int $id): JsonResponse
-    {
-        try {
-            $sub = $this->payment->cancelSubscription($id);
-
-            return $this->json([
-                'subscription_id' => $sub->id,
-                'status'          => $sub->status,
-            ]);
-        } catch (\Throwable $e) {
-            $this->logger->error('Subscription cancellation failed', [
-                'exception' => $e,
-                'id'        => $id,
-            ]);
-            return $this->json(['error' => 'Internal server error'], 500);
-        }
-    }
 
     /**
      * VINDI unit test connection
@@ -133,7 +61,7 @@ class SubscriptionController extends AbstractController
     {
         try {
             $customer = $this->payment->createCustomer([
-                'name' => 'Live Test',
+                'name' => 'Live Test 300 ',
                 'email' => 'test@yourdomain.com'
             ]);
 

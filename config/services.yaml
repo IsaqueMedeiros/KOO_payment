@@ -12,11 +12,8 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        bind:
-            $planId: '%env(VINDI_OPEN_COMPANY_PLAN_ID)%'
-            $basicProductId: '%env(VINDI_BASIC_PRODUCT_ID)%'
-            $premiumProductId: '%env(VINDI_PREMIUM_PRODUCT_ID)%'
-            $exclusiveProductId: '%env(VINDI_EXCLUSIVE_PRODUCT_ID)%'
+
+
 
     App\Controller\:
         resource: '../src/Controller'
@@ -30,6 +27,11 @@ services:
         arguments:
             $apiKey: '%env(VINDI_API_KEY)%'
             $apiUri: '%env(VINDI_API_URI)%'
+
+    # App\Service\RefundService:
+    #     arguments:
+    #         $apiRefund: '%env(VINDI_API_REFUND)%'
+
 
 
     # add more service definitions when explicit configuration is needed
