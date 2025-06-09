@@ -1,9 +1,13 @@
 <?php
+
+namespace App\Controller;
+
 use App\Service\RefundService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+
 class WebhookController
 {
     private RefundService $refundService;
@@ -35,7 +39,6 @@ class WebhookController
 
         switch ($event) {
             case 'bill.paid':
-                // Se quiser estornar automaticamente ao receber confirmação de pagamento
                 try {
                     $chargeId = $data['last_charge']['id'] ?? null;
 
@@ -53,7 +56,6 @@ class WebhookController
                     ]);
                 }
                 break;
-                
             case 'bill.failed':
                 break;
             case 'bill.refunded':
